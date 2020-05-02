@@ -1,5 +1,11 @@
 # podcast_web
 
+## Screenshot
+
+- [一覧表示](https://imgur.com/WQVltRS)
+- [詳細表示](https://imgur.com/SFq0lbZ)
+
+
 ## Project setup
 ```
 npm install
