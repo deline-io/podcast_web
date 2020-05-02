@@ -13,6 +13,11 @@ export default {
   name: 'Home',
   components: {
     HelloWorld
+  },
+  mounted() {
+    this.axios
+    .get('list.json')
+    .then(res => console.log(res))
   }
 }
 </script>
