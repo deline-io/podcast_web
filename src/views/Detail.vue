@@ -1,60 +1,75 @@
 <template>
+  <div v-if="episode">
+    <header class="primary white--text pa-4">
+      <v-container>
+        <div class="text-h4">{{ pubDateString }}</div>
+        <div class="text-h2 mt-2 font-weight-black">{{ episode.title }}</div>
+        <div class="text-h5 mt-6">{{ episode.description }}</div>
+      </v-container>
+    </header>
+
     <v-container>
-        <h1 class="display-1">{{ episode.title }}</h1>
-        <h2 class="subtitle-1">{{ episode.description }}</h2>
-
-        <v-chip-group column class="tag-container">
-            <v-chip v-for="tag in episode.tags" :key="tag" label class="ma-1">{{ tag }}</v-chip>
-        </v-chip-group>
-
-        <v-card class="show-note">
-            <v-card-text>
-                <div>
-                    <audio :src="episode.file_url" controls/>
-                </div>
-
-                <span>{{ episode.pub_date }}</span>
+      <v-row>
+        <v-col>
+          <v-card>
+            <v-card-text class="pb-0">
+              <v-row justify="center" :no-gutters="true">
+                <v-col cols="12" xs="12" sm="10" md="8" lg="6">
+                  <vuetify-audio :file="episode.file_url" :flat="true" />
+                </v-col>
+              </v-row>
             </v-card-text>
 
-            <v-card-actions>
-                <v-spacer/>
-                <v-btn icon @click="isVisible = !isVisible">
-                    <v-icon>{{ isVisible ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                 </v-btn>
-            </v-card-actions>
+            <v-card-title class="py-0 font-weight-black">
+              Keywords
+            </v-card-title>
+            <v-card-text class="mt-2">
+              <div>
+                <v-chip v-for="tag in episode.tags" :key="tag" class="ma-1" color="primary" outlined small>{{ tag }}</v-chip>
+              </div>
+            </v-card-text>
 
-            <v-expand-transition>
-                <div v-show="isVisible">
-                <v-divider></v-divider>
+            <v-divider />
 
-                <v-card-text>
-                    <span v-html="episode.show_note"/>
-                </v-card-text>
-                </div>
-            </v-expand-transition>
-        </v-card>
+            <v-card-text>
+              <div v-html="episode.show_note"/>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
+  </div>
 </template>
 
 <script>
-export default {
-  name: 'Detail',
-  data: function() {
+  import VuetifyAudio from 'vuetify-audio'
+
+  export default {
+    name: 'Detail',
+    data: function() {
       return {
-          episode: null,
-          isVisible: false
+        episode: null
       }
-  },
-  mounted() {
-    this.axios.get(`episodes/${this.$route.params.id}.json`).then(res =>
+    },
+    mounted() {
+      this.axios.get(`episodes/${this.$route.params.id}.json`).then(res =>
         this.episode = res.data
-    )
+      )
+    },
+    computed: {
+      pubDateString: function() {
+        var date = new Date(Date.parse(this.episode.pub_date))
+        return date.toLocaleDateString()
+      }
+    },
+    components: {
+      VuetifyAudio
+    }
   }
-}
 </script>
 
 <style scoped>
-.show-note {
-    margin: 1em 0;
-}
+  header {
+    min-height: 280px;
+  }
 </style>

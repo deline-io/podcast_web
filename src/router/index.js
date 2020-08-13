@@ -1,21 +1,34 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import About from '../views/About.vue'
 import List from '../views/List.vue'
 import Detail from '../views/Detail.vue'
 
 Vue.use(VueRouter)
 
-  const routes = [
+export const episodeListRouteName = 'List'
+export const aboutRouteName = 'About'
+
+const routes = [
   {
-    path: '/',
+    path: '/episodes',
     name: 'List',
     component: List
   },
   {
-    path: '/:id',
+    path: '/episodes/:id',
     name: 'Detail',
     component: Detail
-  }
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: About
+  },
+  {
+    path: '*',
+    redirect: { name: 'List' }
+  },
 ]
 
 const router = new VueRouter({
